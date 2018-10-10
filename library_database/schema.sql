@@ -6,10 +6,12 @@ BEGIN
 	CREATE DATABASE [db_library]
 END
 
+GO
+
 USE db_library
 GO
 
-
+/* --- TABLES --- */
 IF OBJECT_ID('dbo.library_branch') is null
 BEGIN
 	-- library branches
@@ -52,12 +54,13 @@ IF OBJECT_ID('dbo.publisher') is null
 BEGIN
 	-- publishers
 	CREATE TABLE publisher (
+			[pub_id] int IDENTITY(0001,1) not null,
 			[pub_name] varchar(50) not null,
 			[pub_address] varchar(30) null,
 			[pub_phone] varchar(12) null,
 		PRIMARY KEY NONCLUSTERED 
 		(
-			[pub_name] ASC
+			[pub_id] ASC
 		) ON [PRIMARY]
 	)
 END
@@ -70,8 +73,8 @@ BEGIN
 	CREATE TABLE book (
 			[book_id] int IDENTITY(0001,1) not null,
 			[bk_title] varchar(50) not null,
-			[pub_name] varchar(50) not null,
-		CONSTRAINT fk_bkPublisher FOREIGN KEY (pub_name) REFERENCES publisher(pub_name),
+			[pub_id] int not null,
+		CONSTRAINT fk_bkPublisher FOREIGN KEY (pub_id) REFERENCES publisher(pub_id),
 		PRIMARY KEY NONCLUSTERED 
 		(
 			[book_id] ASC
@@ -86,26 +89,14 @@ END
 
 GO
 
-CREATE TRIGGER tI_book ON book
-AFTER INSERT, UPDATE
-AS
-BEGIN
-	
-	UPDATE publisher SET pub_name = i.pub_name
-	FROM inserted i
-
-END
-
-GO
-
 IF OBJECT_ID('dbo.author') is null
 BEGIN
 	-- authors
 	CREATE TABLE author (
 			[book_id] int not null,
 			[author_name] varchar(40) not null,
-			[pub_name] varchar(50) not null,
-		CONSTRAINT fk_authPublisher FOREIGN KEY (pub_name) REFERENCES publisher(pub_name),
+			[pub_id] int null,
+		CONSTRAINT fk_authPublisher FOREIGN KEY (pub_id) REFERENCES publisher(pub_id),
 		CONSTRAINT fk_authBook FOREIGN KEY (book_id) REFERENCES book(book_id)
 	)
 END
@@ -121,11 +112,16 @@ BEGIN
 			[card_no] int not null,
 			[date_out] datetime not null,
 			[date_due] datetime not null,
+			[status] int not null,
 		CONSTRAINT fk_loanBook FOREIGN KEY (book_id) REFERENCES book(book_id),
 		CONSTRAINT fk_loanBranch FOREIGN KEY (branch_id) REFERENCES library_branch(branch_id),
 		CONSTRAINT fk_loanBorrower FOREIGN KEY (card_no) REFERENCES borrower(card_no),
-		CONSTRAINT def_dateDue DEFAULT (DATEADD(day,5,GETDATE())) FOR [date_due]
 	)
+
+		ALTER TABLE book_loans 
+			ADD CONSTRAINT def_dateDue DEFAULT (DATEADD(day,5,GETDATE())) FOR [date_due]
+		ALTER TABLE book_loans 
+			ADD CONSTRAINT def_status DEFAULT (1) FOR [status]
 
 		CREATE UNIQUE NONCLUSTERED INDEX natKey_loans ON book_loans (
 			[card_no],
@@ -146,8 +142,11 @@ BEGIN
 			[no_ofCopies] int not null,
 		CONSTRAINT fk_copyBook FOREIGN KEY (book_id) REFERENCES book(book_id),
 		CONSTRAINT fk_copyBranch FOREIGN KEY (branch_id) REFERENCES library_branch(branch_id),
-		CONSTRAINT def_copies DEFAULT (0) FOR [no_ofCopies]
 	)
+
+		ALTER TABLE book_copies 
+			ADD CONSTRAINT def_copies DEFAULT (0) FOR [no_ofCopies]
+
 		CREATE UNIQUE NONCLUSTERED INDEX natKey_copies ON book_copies(
 			[book_id],
 			[branch_id]
@@ -155,3 +154,26 @@ BEGIN
 END
 
 GO
+
+/* --- VIEWS --- */
+IF OBJECT_ID('dbo.vbooks_out') is null 
+BEGIN
+	-- all books currently out
+	CREATE VIEW vbooks_out
+	AS
+	SELECT bk_title, date_out, date_due
+		FROM books b
+		JOIN book_loans bl (NOLOCK) ON a.book_id = bl.book_id
+		GROUP BY bk_title, date_out, date_due
+		HAVING date_due > GETDATE()
+
+END
+
+GO
+
+
+/* --- PROCS ---*/
+-- TO DO
+-- update books duedate
+-- returned book
+-- checked out book
