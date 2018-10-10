@@ -24,6 +24,8 @@ BEGIN
 	)
 END
 
+GO
+
 IF OBJECT_ID('dbo.borrower') is null
 BEGIN
 	-- borrowers
@@ -44,12 +46,14 @@ BEGIN
 		)
 END
 
+GO
+
 IF OBJECT_ID('dbo.publisher') is null
 BEGIN
 	-- publishers
 	CREATE TABLE publisher (
 			[pub_name] varchar(50) not null,
-			[pub_address] varchar(30) not null,
+			[pub_address] varchar(30) null,
 			[pub_phone] varchar(12) null,
 		PRIMARY KEY NONCLUSTERED 
 		(
@@ -57,6 +61,8 @@ BEGIN
 		) ON [PRIMARY]
 	)
 END
+
+GO
 
 IF OBJECT_ID('dbo.book') is null
 BEGIN
@@ -78,6 +84,20 @@ BEGIN
 		)
 END
 
+GO
+
+CREATE TRIGGER tI_book ON book
+AFTER INSERT, UPDATE
+AS
+BEGIN
+	
+	UPDATE publisher SET pub_name = i.pub_name
+	FROM inserted i
+
+END
+
+GO
+
 IF OBJECT_ID('dbo.author') is null
 BEGIN
 	-- authors
@@ -89,6 +109,8 @@ BEGIN
 		CONSTRAINT fk_authBook FOREIGN KEY (book_id) REFERENCES book(book_id)
 	)
 END
+
+GO
 
 IF OBJECT_ID('dbo.book_loans') is null
 BEGIN
@@ -112,6 +134,8 @@ BEGIN
 		)
 END
 
+GO
+
 IF OBJECT_ID('dbo.book_copies') is null
 BEGIN
 	-- book copies and records
@@ -129,3 +153,5 @@ BEGIN
 			[branch_id]
 		)
 END
+
+GO
