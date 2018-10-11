@@ -4,11 +4,9 @@ IF NOT EXISTS(SELECT name FROM sys.databases WHERE name ='db_library')
 BEGIN
 	CREATE DATABASE [db_library]
 END
-
 GO
 
 USE [db_library]
-
 GO
 
 
