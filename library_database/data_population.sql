@@ -35,7 +35,7 @@ GO
 -- borrower records
 IF NOT EXISTS(SELECT 1 FROM borrower)
 BEGIN
-	INSERT INTO borrower (bwr_name, bwr_address, bwr_phone)
+	INSERT borrower (bwr_name, bwr_address, bwr_phone)
 	VALUES
 		('John Doe','Portland, OR', '123-456-7890'),
 		('Jane Smith','Tigard, OR', '123-456-7890'),
@@ -53,7 +53,7 @@ GO
 -- library branches
 IF NOT EXISTS (SELECT 1 FROM library_branch)
 BEGIN
-	INSERT INTO library_branch (branch_name, branch_address)
+	INSERT library_branch (branch_name, branch_address)
 	VALUES
 		('Central', '123 Main Street'),
 		('Sharpstown', '678 Cutting Court'),
@@ -68,7 +68,7 @@ GO
 -- book records (randomly associating to a publisher)
 IF NOT EXISTS(SELECT 1 FROM book)
 BEGIN
-	INSERT INTO book (bk_title, pub_id)
+	INSERT book (bk_title, pub_id)
 	VALUES
 		('The Lost Tribe', FLOOR(RAND()*(20-1+1))+1),
 		('A Tale of Two Cities', FLOOR(RAND()*(20-1+1))+1),
@@ -98,7 +98,7 @@ GO
 -- author records
 IF NOT EXISTS(SELECT 1 FROM author)
 BEGIN
-	INSERT INTO author (book_id, author_name)
+	INSERT author (book_id, author_name)
 	VALUES
 		(1, 'Edward Marriot'),
 		(11, 'Charles Dickens'),
@@ -134,7 +134,7 @@ GO
 -- inventory records for branches (randomly associating to branches and setting inventory amount)
 IF NOT EXISTS(SELECT 1 FROM book_copies)
 BEGIN
-	INSERT INTO book_copies (book_id, branch_id, book_condition, no_ofCopies)
+	INSERT book_copies (book_id, branch_id, book_condition, no_ofCopies)
 	VALUES
 		(1, FLOOR(RAND()*(6-1+1))+1, 'new', FLOOR(RAND()*(10-1+1))+1), 
 		(11, FLOOR(RAND()*(6-1+1))+1, 'worn', FLOOR(RAND()*(10-1+1))+1),
@@ -176,6 +176,15 @@ BEGIN
 		(1, FLOOR(RAND()*(6-1+1))+1, 'new', FLOOR(RAND()*(10-1+1))+1),
 		(61, FLOOR(RAND()*(6-1+1))+1, 'worn', FLOOR(RAND()*(10-1+1))+1),
 		(91, FLOOR(RAND()*(6-1+1))+1, 'new', FLOOR(RAND()*(10-1+1))+1)
+END
+
+GO
+
+-- set master tran id
+IF NOT EXISTS(SELECT 1 FROM tran_id)
+BEGIN
+	INSERT tran_id (tran_id)
+	VALUES (100)
 END
 
 GO
