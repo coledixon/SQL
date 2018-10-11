@@ -122,10 +122,11 @@ BEGIN
 		(191, 'Jane Austen'),
 		(201, 'Edward Marriot')
 
-	-- associate author to publisher
-	UPDATE a SET a.pub_id = b.pub_id
-		FROM author a
-		JOIN book b (NOLOCK) ON a.book_id = b.book_id
+	-- MOVING LOGIC TO TRIGGER
+	---- associate author to publisher
+	--UPDATE a SET a.pub_id = b.pub_id
+	--	FROM author a
+	--	JOIN book b (NOLOCK) ON a.book_id = b.book_id
 
 END
 
