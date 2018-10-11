@@ -129,7 +129,8 @@ BEGIN
 		CREATE UNIQUE NONCLUSTERED INDEX natKey_loans ON book_loans (
 			[card_no],
 			[book_id],
-			[branch_id]
+			[branch_id],
+			[tran_id]
 		)
 END
 
