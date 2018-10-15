@@ -44,14 +44,14 @@ ROLLBACK TRAN
 -- test create new book / publisher / author (stacked procs)
 BEGIN TRAN
 
-select * from book where bk_title = 'test'
-select * from publisher where pub_name = 'testest'
-select * from author where author_name = 'test test'
+select 'book', * from book where bk_title = 'test'
+select 'publisher', * from publisher where pub_name = 'testest'
+select 'author', * from author where author_name = 'test test'
 
 exec spcreatebookrecord 'test', 'buckets', 'test test', 4, 'testtest', null, null
 
-select * from book where bk_title = 'test'
-select * from publisher where pub_name = 'testtest'
-select * from author where author_name = 'test test'
+select 'book', * from book where bk_title = 'test'
+select 'publisher', * from publisher where pub_name = 'testest'
+select 'author', * from author where author_name = 'test test'
 
 ROLLBACK TRAN

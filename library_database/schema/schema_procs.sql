@@ -5,6 +5,7 @@
 -- TO DO
 -- update books due_date
 -- relinquished book
+-- move books returned to wrong branch to owner branch
 
 
 -- check out book from specific branch
@@ -120,8 +121,8 @@ GO
 	
 	-- remove tran record
 	DELETE FROM book_loans 
-		WHERE branch_id = @branch_id 
-			AND book_id = @book_id AND card_no = @card_no
+		WHERE /*branch_id = @branch_id 
+			AND*/ book_id = @book_id AND card_no = @card_no
 
 	IF (COALESCE(@no_ofCopies,0) >= 0) -- update copies on-hand
 	BEGIN

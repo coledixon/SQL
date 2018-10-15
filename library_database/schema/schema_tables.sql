@@ -12,7 +12,7 @@ GO
 
 /* --- TABLES --- */
 -- TO DO
--- book_loans to be used as a trans table (only hold active records, not store data)
+-- table for books returned to different branch (owner branch / returned branch)
 
 IF OBJECT_ID('dbo.library_branch') is null
 BEGIN
