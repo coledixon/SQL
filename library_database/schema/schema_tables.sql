@@ -154,24 +154,25 @@ END
 
 GO
 
-IF OBJECT_ID('dbo.books_out') is null
-BEGIN
-	-- books checked out
-	CREATE TABLE books_out (
-			[tran_id] int not null,
-			[book_id] int not null,
-			[branch_id] int not null,
-			[date_out] datetime not null,
-		CONSTRAINT fk_outBook FOREIGN KEY (book_id) REFERENCES book(book_id),
-		CONSTRAINT fk_outBranch FOREIGN KEY (branch_id) REFERENCES library_branch(branch_id)
-	)
-		CREATE UNIQUE NONCLUSTERED INDEX natKey_out ON books_out (
-			[tran_id],
-			[book_id]
-		)
-END
+-- NOT REQUIRED / book_loans is the tran table
+--IF OBJECT_ID('dbo.books_out') is null
+--BEGIN
+--	-- books checked out
+--	CREATE TABLE books_out (
+--			[tran_id] int not null,
+--			[book_id] int not null,
+--			[branch_id] int not null,
+--			[date_out] datetime not null,
+--		CONSTRAINT fk_outBook FOREIGN KEY (book_id) REFERENCES book(book_id),
+--		CONSTRAINT fk_outBranch FOREIGN KEY (branch_id) REFERENCES library_branch(branch_id)
+--	)
+--		CREATE UNIQUE NONCLUSTERED INDEX natKey_out ON books_out (
+--			[tran_id],
+--			[book_id]
+--		)
+--END
 
-GO
+--GO
 
 IF OBJECT_ID('dbo.books_lost') is null
 BEGIN
