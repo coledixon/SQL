@@ -1,6 +1,6 @@
 /* TRIGGERS */
 
-IF OBJECT_ID('dbo.tI_author') is null
+IF OBJECT_ID('dbo.tI_author') is not null DROP TRIGGER [dbo].[tI_author]
 BEGIN
 	CREATE TRIGGER [dbo].tI_author ON author
 	AFTER INSERT
