@@ -1,7 +1,8 @@
 /* TRIGGERS */
 
 IF OBJECT_ID('dbo.tI_author') is not null DROP TRIGGER [dbo].[tI_author]
-BEGIN
+GO
+
 	CREATE TRIGGER [dbo].tI_author ON author
 	AFTER INSERT
 	AS
@@ -11,6 +12,5 @@ BEGIN
 		FROM author a
 		JOIN book b (NOLOCK) ON a.book_id = b.book_id
 		WHERE a.pub_id IS NULL
-END
 
 GO
