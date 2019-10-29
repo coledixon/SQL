@@ -1,4 +1,3 @@
-
 USE GrandArmyOfTheRepublic
 GO
 
