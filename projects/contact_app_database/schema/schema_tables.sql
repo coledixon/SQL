@@ -53,7 +53,6 @@ END
 
 GO
 
-
 IF OBJECT_ID('dbo.contact_phone') is null
 BEGIN
 	-- contact phone numbers
