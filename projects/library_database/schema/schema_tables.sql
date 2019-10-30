@@ -1,4 +1,5 @@
 /* SCHEMA FOR SQL LIBRARY PROJECT */
+/* Copyright 2018 || Cole Dixon || All rights reserved */
 
 IF NOT EXISTS(SELECT name FROM sys.databases WHERE name ='db_library')
 BEGIN
