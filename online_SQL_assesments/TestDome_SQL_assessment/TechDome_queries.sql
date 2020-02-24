@@ -69,3 +69,27 @@ SELECT userId, AVG(duration)
 FROM sessions
 	GROUP BY userId
 	HAVING COUNT(userId) > 1
+
+
+-- 5
+/*
+	Information about pets is kept in two separate tables:
+
+	TABLE dogs
+		id INTEGER NOT NULL PRIMARY KEY,
+		name VARCHAR(50) NOT NULL
+
+	TABLE cats
+		id INTEGER NOT NULL PRIMARY KEY,
+		name VARCHAR(50) NOT NULL
+
+	Write a query that selects all distinct pet names.
+
+*/
+-- Write only the SQL statement that solves the problem and nothing else.
+
+SELECT name
+FROM dogs
+	UNION
+SELECT name
+FROM cats
