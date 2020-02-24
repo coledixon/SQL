@@ -7,7 +7,7 @@
 	Given the following data defintion, select city names in descending order
 
 	TABLE cities
-		id INT NOT NULL PRIMARY KEY,
+		id INTEGER NOT NULL PRIMARY KEY,
 		name VARCHAR(30) NOT NULL
 
 */
@@ -23,7 +23,7 @@ FROM cities
 	Given the following data definition, write a query that returns the number of students whose first name is John.
 
 	TABLE students
-		id INT PRIMARY KEY,
+		id INTEGER PRIMARY KEY,
 		firstName VARCHAR(30) NOT NULL,
 		lastName VARCHAR(30) NOT NULL
 
@@ -36,7 +36,14 @@ FROM students
 
 -- 3
 /*
+	A table containing the students enrolled in a yearly course has incorrect data in records with ids 20-100.
 
+	TABLE enrollments
+		id INTEGER NOT NULL PRIMARY KEY,
+		year INTEGER NOT NULL,
+		studentId INTEGER NOT NULL
+
+	Write a query that updates the 'year' field of every faulty record to 2015.
 
 */
 -- Write only the SQL statement that solves the problem and nothing else.
@@ -47,7 +54,14 @@ SET year = 2015
 
 -- 4
 /*
+	App usage data is kept in the following table:
 
+	TABLE sessions
+		id INTEGER PRIMARY KEY,
+		userId INTEGER NOT NULL,
+		duration DECIMAL NOT NULL
+
+	Write a query that selects the userId and average session duration for each user who has more than one session.
 
 */
 -- Write only the SQL statement that solves the problem and nothing else.
