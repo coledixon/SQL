@@ -13,9 +13,9 @@ FROM authors a
 -- 2
 -- Write an SQL query to find out how many users inserted more than 1000 but less than 2000 images in their presentations
 SELECT COUNT(*) FROM
-  (SELECT user_id, COUNT(event_date_time) AS image_per_user
-	FROM event_log
-		GROUP BY user_id) AS image_per_user
+	(SELECT user_id, COUNT(event_date_time) AS image_per_user
+		FROM event_log
+			GROUP BY user_id) AS image_per_user
 	WHERE image_per_user < 2000 AND image_per_user > 1000
 
 
@@ -30,7 +30,6 @@ FROM employees e
 
 -- 4
 -- Change the year value to 2015 for all students with ids between 20 - 100
-UPDATE enrollments
-	SET year = 2015
-	WHERE id BETWEEN 20 AND 100
+UPDATE enrollments SET year = 2015
+WHERE id BETWEEN 20 AND 100
 

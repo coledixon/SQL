@@ -12,10 +12,9 @@
 
 */
 -- Write only the SQL statement that solves the problem and nothing else.
-
 SELECT name
 FROM cities
-  ORDER BY name DESC
+	ORDER BY name DESC
 
 
 -- 2
@@ -31,7 +30,7 @@ FROM cities
 -- Write only the SQL statement that solves the problem and nothing else.
 SELECT COUNT(firstName) as johns
 FROM students
-  WHERE firstName = 'John'
+	WHERE firstName = 'John'
 
 
 -- 3
@@ -47,9 +46,8 @@ FROM students
 
 */
 -- Write only the SQL statement that solves the problem and nothing else.
-UPDATE enrollments
-SET year = 2015
-  WHERE id BETWEEN 20 AND 100
+UPDATE enrollments SET year = 2015
+WHERE id BETWEEN 20 AND 100
 
 
 -- 4
@@ -87,7 +85,6 @@ FROM sessions
 
 */
 -- Write only the SQL statement that solves the problem and nothing else.
-
 SELECT name
 FROM dogs
 	UNION
