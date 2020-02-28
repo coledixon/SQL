@@ -33,3 +33,18 @@ FROM employees e
 UPDATE enrollments SET year = 2015
 WHERE id BETWEEN 20 AND 100
 
+
+-- 5
+-- Select all even number records from table id_records. Then select all odd number records
+SELECT * -- evens
+FROM id_records
+	WHERE id % 2 = 0
+
+SELECT * -- odds
+FROM id_records
+	WHERE id % 2 != 0
+
+
+-- 6
+-- 
+
