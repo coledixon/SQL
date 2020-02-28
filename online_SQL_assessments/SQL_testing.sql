@@ -85,3 +85,7 @@ FROM users u
 		ORDER BY training_date DESC
 
 
+-- 7
+-- Write a query to add 2 when field (Nmbr) value equals 0 and add 3 when field (Nmbr) value equals 1. TBL.Nmbr (1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1)
+UPDATE TBL 
+SET Nmbr = CASE WHEN Nmber = 0 THEN Nmbr+2 ELSE Nmbr+3 END
