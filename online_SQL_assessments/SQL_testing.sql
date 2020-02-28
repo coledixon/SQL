@@ -89,3 +89,12 @@ FROM users u
 -- Write a query to add 2 when field (Nmbr) value equals 0 and add 3 when field (Nmbr) value equals 1. TBL.Nmbr (1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1)
 UPDATE TBL 
 SET Nmbr = CASE WHEN Nmber = 0 THEN Nmbr+2 ELSE Nmbr+3 END
+
+
+-- 8
+-- For each invoice, show the Invoice ID, the billing date, the customer’s name, and the name of the customer who referred that customer (if any). The list should be ordered by billing date.
+SELECT i.Id, i.BillingDate, c.Name, ref.Name as Referredby
+FROM invoices i 
+	JOIN customers c (NOLOCK) ON i.Id = c.Id
+	LEFT JOIN customers ref (NOLOCK) ON c.ReferredBy = ref.Id
+		ORDER BY i.BillilngDate
