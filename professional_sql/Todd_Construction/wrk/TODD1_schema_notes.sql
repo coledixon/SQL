@@ -17,7 +17,7 @@
 -- find columns within schema
 SELECT      COLUMN_NAME AS 'ColumnName', TABLE_NAME AS  'TableName'
 FROM        INFORMATION_SCHEMA.COLUMNS
-WHERE       COLUMN_NAME LIKE '%modelid%' -- replace val with desired col name
+WHERE       COLUMN_NAME LIKE '%cost%' -- replace val with desired col name
 ORDER BY    TableName, ColumnName
 
 -- 'E' for employees, 'L' for locations (including stock locations)
@@ -62,6 +62,7 @@ select * from Items
 -- Inventories tbl
 	-- OwnerEntityId: the stock location that owns these assets
 select * from Inventories
+where ItemId = '34C98A57-38FD-4611-ADE9-86BB3936DACC'
 
 select top 10 * from InventoryKeys
 
@@ -76,9 +77,13 @@ select * from StockView
 -- TOOL INFO
 -----
 
-select top 100 * from ToolBrowser
+select top 100 * from ToolPurchaseCostInfo
 
-select * from ToolInformation
+select * from ToolPurchaseCostInfo
+where ItemId = '34C98A57-38FD-4611-ADE9-86BB3936DACC'
+
+select top 10 * from ToolInformation
+order by ItemNumber
 
 -----
 -- TRANSFERS
@@ -93,11 +98,5 @@ select top 10 b.Description, b.type,
 join Entities b (NOLOCK) on a.TransferredToEntityId = b.EntityId
 where b.type = 'L'
 
-select * from Entities
-
-select * from Descriptions
-
-select * from Models
-
-
-select * from TransferHeaders order by CreatedOn desc
+select * from TransferLines 
+where TransferHeaderId = 'BC7A797E-9179-4BCF-A602-E73911578434'
