@@ -20,7 +20,7 @@ FROM TransferHeaders toh
 	JOIN Items i (NOLOCK) ON i.ItemId = tol.ItemId
 	JOIN Models m (NOLOCK) ON m.ModelId = i.ModelId
 	JOIN Categories c (NOLOCK) ON c.CategoryId = m.CategoryId
-	JOIN Descriptions d (NOLOCK) ON d.DescriptionId = m.DescriptionId
-	--MAKE WORK: JOIN Inventories inv (NOLOCK) ON inv.ItemId = tol.ItemId -- AND
+	JOIN Descriptions d (NOLOCK) ON d.DescriptionId = m.DescriptionId 
+	JOIN Inventories inv (NOLOCK) ON inv.ItemId = tol.ItemId
 		WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
 		ORDER BY toh.CreatedOn DESC
