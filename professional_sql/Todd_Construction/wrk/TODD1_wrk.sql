@@ -87,8 +87,13 @@ where ItemId = '18F92DCC-3F91-46B5-A696-30F666FA0835'
 or itemid = 'B21DF199-3A8F-49BD-A35A-41F870621108'
 
 select * from inventories
-where ItemId = 'B21DF199-3A8F-49BD-A35A-41F870621108'
-or  ItemId = '18F92DCC-3F91-46B5-A696-30F666FA0835'
+where ItemId = '364880BD-4B45-469C-A72F-08B230BB8CCD'
+or  ItemId = 'BF1DC5EF-FA26-4B72-8ADB-17A3449CB0E8'
+
+select * from ToolBrowser where ItemId = '364880BD-4B45-469C-A72F-08B230BB8CCD'
+order by LastTransferDate desc
+
+select * from ToolPurchaseCostInfo where ItemNumber = 52740
 
 -- trans from
 select * from Entities
@@ -105,13 +110,14 @@ order by CreatedOn desc
 select top 10 * from TransferLines
 where TransferHeaderId = '9C8E50B6-846E-4E06-994A-901AC718A27D'
 
+-----
+-- location_reporting query wrk
+-----
 
--- production query wrk
-
-SELECT  toh.TransferHeaderId, YEAR(toh.CreatedOn) as Year, -- TO header info
+SELECT  toh.TransferHeaderId, YEAR(toh.CreatedOn) as Year, CAST(toh.CreatedOn as DATE) as TOLineDate, -- TO header info
 	fromLoc.description as FromLocation, COALESCE(fromLoc.City,'') as City, COALESCE(fromLoc.Country,'') as County, toh.TransferredFromEntityId,-- from
 	toLoc.Description as ToLocation, COALESCE(toLoc.City,'') as City, COALESCE(toLoc.Country,'') as County, toh.TransferredToEntityId, -- to
-	tol.ItemId, i.number, c.Description as CategoryDesc, d.Description as ModelDesc, COALESCE(i.Serialnumber,'') as SerialNumber, COALESCE(i.BarCode,'') as BarCode, -- item info
+	tol.ItemId, i.number, c.Description as CategoryDesc, d.Description as ModelDesc, COALESCE(i.Serialnumber,'') as SerialNumber, COALESCE(i.BarCode,'') as BarCode, m.Type, --tool.Cost as PurchaseCost, tool.ItemCreatedOn as PurchaseDate, -- item info
 	tol.Qty, tol.TransferLineId -- TO line info
 FROM TransferHeaders toh
 	JOIN TransferLines tol (NOLOCK) ON toh.TransferHeaderId = tol.TransferHeaderId
@@ -120,6 +126,13 @@ FROM TransferHeaders toh
 	JOIN Items i (NOLOCK) ON i.ItemId = tol.ItemId
 	JOIN Models m (NOLOCK) ON m.ModelId = i.ModelId
 	JOIN Categories c (NOLOCK) ON c.CategoryId = m.CategoryId
-	JOIN Descriptions d (NOLOCK) ON d.DescriptionId = m.DescriptionId
-		WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- only 2019 - Present
+	JOIN Descriptions d (NOLOCK) ON d.DescriptionId = m.DescriptionId 
+	LEFT JOIN (SELECT ItemId--, Cost, ItemCreatedOn
+			FROM ToolBrowser) tool ON tool.ItemId = i.ItemId
+		WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
 		ORDER BY toh.CreatedOn DESC
+
+
+-----
+-- inventory_tracking query wrk
+-----
