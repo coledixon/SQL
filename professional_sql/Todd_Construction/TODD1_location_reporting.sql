@@ -3,7 +3,7 @@
 		Cole Dixon :: Copyright 2020
 */
 -- PURPOSE: tracking tool locations for tax reporting / auditing
--- NOTES: add JOIN Inventories to get PurchaseDate / PurchaseCost (or find relevent VIEW)
+-- NOTES: add JOIN ToolBrowser to get PurchaseDate / PurchaseCost (or find relevent VIEW)
 
 -- ToolBrowser / ToolCost... / ToolInformation ???
 
@@ -21,8 +21,5 @@ FROM TransferHeaders toh
 	JOIN Models m (NOLOCK) ON m.ModelId = i.ModelId
 	JOIN Categories c (NOLOCK) ON c.CategoryId = m.CategoryId
 	JOIN Descriptions d (NOLOCK) ON d.DescriptionId = m.DescriptionId 
-	--JOIN (SELECT DISTINCT ItemId 
-	--		FROM Inventories inv
-	--		)
 		WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
 		ORDER BY toh.CreatedOn DESC
