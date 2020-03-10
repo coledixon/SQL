@@ -17,7 +17,7 @@
 -- find columns within schema
 SELECT      COLUMN_NAME AS 'ColumnName', TABLE_NAME AS  'TableName'
 FROM        INFORMATION_SCHEMA.COLUMNS
-WHERE       COLUMN_NAME LIKE '%cost%' -- replace val with desired col name
+WHERE       COLUMN_NAME LIKE '%purchasecost%' -- replace val with desired col name
 ORDER BY    TableName, ColumnName
 
 -- 'E' for employees, 'L' for locations (including stock locations)
