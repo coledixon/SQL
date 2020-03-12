@@ -94,10 +94,6 @@ select itemid, Cost, ItemCreatedOn from ToolBrowser
 UNION
 select itemid, Cost, ItemCreatedOn from ToolBrowser
 
-select * from ToolBrowser
-where ItemId = '364880BD-4B45-469C-A72F-08B230BB8CCD'
-or  ItemId = 'F875675C-BB3E-4ADB-84A9-C78C7DD4C58C'
-order by LastTransferDate desc
 
 select * from ToolPurchaseCostInfo where ItemNumber = 52740
 
@@ -127,31 +123,33 @@ order by LastTransferDate desc
 
 select * from ToolPurchaseCostInfo where ItemId = '364880BD-4B45-469C-A72F-08B230BB8CCD'
 
------
--- location_reporting query wrk
------
 
-SELECT  toh.TransferHeaderId, YEAR(toh.CreatedOn) as Year, CAST(toh.CreatedOn as DATE) as TOLineDate, -- TO header info
-	fromLoc.description as FromLocation, COALESCE(fromLoc.City,'') as City, COALESCE(fromLoc.Country,'') as County, toh.TransferredFromEntityId,-- from location
-	toLoc.Description as ToLocation, COALESCE(toLoc.City,'') as City, COALESCE(toLoc.Country,'') as County, toh.TransferredToEntityId, -- to location
-	tol.ItemId, i.Number as ItemNumber, c.Description as CategoryDesc, d.Description as ModelDesc, COALESCE(i.Serialnumber,'') as SerialNumber, COALESCE(i.BarCode,'') as BarCode, m.Type, -- tool.PurchaseCost, tool.PurchaseDate, -- item info
-	tol.Qty, tol.TransferLineId -- TO line info
-FROM TransferHeaders toh
-	JOIN TransferLines tol (NOLOCK) ON toh.TransferHeaderId = tol.TransferHeaderId
+--- tool views
+select * from ToolBrowser
+where ItemId = 'E2A10444-7755-4C2D-B72F-186B3BBA968C'
+
+--select * from ToolInformation
+--where ItemId = 'E2A10444-7755-4C2D-B72F-186B3BBA968C'
+
+select * from ToolPurchaseCostInfo
+where ItemId = 'E2A10444-7755-4C2D-B72F-186B3BBA968C'
+
+
+----
+
+select * from Items
+where ItemId = 'E2A10444-7755-4C2D-B72F-186B3BBA968C'
+
+select * from Inventories
+where ItemId = 'E2A10444-7755-4C2D-B72F-186B3BBA968C'
+
+select * from StockView
+where itemid = 'E2A10444-7755-4C2D-B72F-186B3BBA968C'
+
+select * 
+from TransferHeaders toh
+join TransferLines tol (NOLOCK) on toh.TransferHeaderId = tol.TransferHeaderId
 	LEFT JOIN Entities fromLoc (NOLOCK) ON fromLoc.EntityId = toh.TransferredFromEntityId
 	LEFT JOIN Entities toLoc (NOLOCK) ON toLoc.EntityId = toh.TransferredToEntityId
-	JOIN Items i (NOLOCK) ON i.ItemId = tol.ItemId
-	JOIN Models m (NOLOCK) ON m.ModelId = i.ModelId
-	JOIN Categories c (NOLOCK) ON c.CategoryId = m.CategoryId
-	JOIN Descriptions d (NOLOCK) ON d.DescriptionId = m.DescriptionId
-	LEFT JOIN (SELECT DISTINCT ItemId--, LastTransferLineId -- CD: REMOVED, Cost, ItemCreatedOn
-			FROM ToolBrowser) tool ON tool.ItemId = i.ItemId
 		WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
 		ORDER BY toh.CreatedOn DESC
-
-
------
--- inventory_tracking query wrk
------
-
-dbcc opentran
