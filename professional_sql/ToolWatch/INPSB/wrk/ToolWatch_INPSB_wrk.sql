@@ -9,7 +9,7 @@
 -- find columns within schema
 SELECT      COLUMN_NAME AS 'ColumnName', TABLE_NAME AS  'TableName'
 FROM        INFORMATION_SCHEMA.COLUMNS
-WHERE       COLUMN_NAME LIKE '%assignment%' -- replace val with desired col name
+WHERE       COLUMN_NAME LIKE '%LastTransferDate%' -- replace val with desired col name
 ORDER BY    TableName, ColumnName
 
 --
@@ -58,8 +58,7 @@ join TransferLines tl (NOLOCK) ON tl.TransferHeaderId = th.TransferHeaderId
 		OR ToCostCenterId IS NULL
 		OR FromCostCenterId IS NULL
 
-select * from BillingLines
-where CostCenterId IS NULL
+select * from RateSheetLines
 
 
 
