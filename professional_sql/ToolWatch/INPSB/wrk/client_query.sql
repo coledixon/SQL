@@ -2,7 +2,7 @@
 ---- CLIENT SUPPLIED QUERY (formatted) ------
 --
 
-select DISTINCT
+select top 100
 	Assignment,
 	AssignmentEntityNumber as Job,
 	LastTransferDate, LastTransferNumber, ItemNumber,
