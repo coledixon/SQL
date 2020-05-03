@@ -20,15 +20,15 @@ FROM Toolbrowser tb
 
 -- WORK
 
-SELECT top 1000 * /* tb.Assignment, tb.AssignmentEntityNumber as Job, tb.LastTransferDate, tb.LastTransferNumber, tb.ItemNumber,
+SELECT DISTINCT tb.Assignment, tb.AssignmentEntityNumber as Job, tb.LastTransferDate, tb.LastTransferNumber, tb.ItemNumber,
 	tb.Description, tb.Quantity, rsh.Description as RateSheet,
 	--code.Description as CostCode, cent.RateSheetIdTools, rsl.Type, rsl.MonthlyRate, cent.Description,
 	CASE WHEN rsl.MonthlyRate >0 
-		THEN rsl.MonthlyRate * 176 ELSE 0 END AS 'Monthly Rate' */
+		THEN rsl.MonthlyRate * 176 ELSE 0 END AS 'Monthly Rate'
 	FROM ToolBrowser tb
 		JOIN TransferLines tl (NOLOCK) ON tl.TransferLineId = tb.LastTransferLineId
-		JOIN RateSheetLines rsl (NOLOCK) ON tb.Coal
-		JOIN RateSheetHeaders rsh (NOLOCK) ON rsh.ModelId = rsl.ModelId
+		JOIN RateSheetLines rsl (NOLOCK) ON tl.ToCostCodeId = rsl.CostCodeId
+		JOIN RateSheetHeaders rsh (NOLOCK) ON rsh.RateSheetHeaderId = tb
 		LEFT JOIN CostCenters ccent (NOLOCK) ON ccent.CostCenterId = tb.CostCenterIdTo
 		JOIN TransferLines tl (NOLOCK) ON th.TransferHeaderId = tl. TransferHeaderId -- tl costcode line might still be NULL
 		-- JOIN CostCenters ccent (NOLOCK) ON ccent.CostCenterId = tl.ToCostCenterId
