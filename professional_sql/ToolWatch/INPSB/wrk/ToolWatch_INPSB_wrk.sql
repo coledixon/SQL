@@ -9,33 +9,14 @@
 -- find columns within schema
 SELECT      COLUMN_NAME AS 'ColumnName', TABLE_NAME AS  'TableName'
 FROM        INFORMATION_SCHEMA.COLUMNS
-WHERE       COLUMN_NAME LIKE '%LastTransferDate%' -- replace val with desired col name
+WHERE       COLUMN_NAME LIKE '%ratesheet%' -- replace val with desired col name
 ORDER BY    TableName, ColumnName
 
 --
 ------ WORK -----
 --
 
-SELECT DISTINCT Assignment, AssignmentEntityNumber as Job, LastTransferDate, LastTransferNumber, ItemNumber,
-	tb.Description, tb.Quantity, rsh.Description as RateSheet,
-	code.Description as CostCode, cent.RateSheetIdTools, rsl.Type, rsl.MonthlyRate, cent.Description,
-	CASE WHEN rsl.MonthlyRate >0 
-		THEN rsl.MonthlyRate *176 ELSE 0 END AS 'Monthly Rate'
-
-SELECT DISTINCT *
-FROM Toolbrowser tb
-	JOIN Ratesheetlines rsl (NOLOCK) ON tb.ModelId = rsl.ModelId
-	JOIN TransferLines tl (NOLOCK) ON tb.LastTransferLineId = tl.TransferLineId
-	JOIN CostCenters cent (NOLOCK) ON tl.ToCostCenterId = cent.CostCenterId
-	JOIN CostCodes code (NOLOCK) ON tl.ToCostCodeId = code.CostCodeId
-	JOIN BillingLines bl (NOLOCK) ON rsl.RatesheetLineID = bl.RateSheetLineId
-	INNER JOIN RateSheetHeaders rsh (NOLOCK) ON cent.RateSheetIdTools = rsh.RateSheetHeaderId
-	--INNER JOIN RateSheetLines rs (NOLOCK) ON rsh.RateSheetHeaderId = rs.RateSheetHeaderId
-		WHERE Assignment IS NOT NULL and Assignment != 'Yard' and bl.CostCenterId = tl.ToCostCenterId
-		ORDER BY Assignment, ItemNumber
-
-
-select top 10 Assignment, *
+select top 10 CostCodes, *
 	from ToolBrowser
 
 	
@@ -60,6 +41,7 @@ join TransferLines tl (NOLOCK) ON tl.TransferHeaderId = th.TransferHeaderId
 
 select * from RateSheetLines
 
+select * from CostCodes
 
 
 /*
@@ -76,4 +58,84 @@ select * from RateSheetLines
 	-- looks like anytime there is a header CostCenterTo, there is atleast a header CostCodeIdTo
 
 */
+
+
+--
+---- CLIENT SUPPLIED QUERY (formatted) ------
+--
+
+SELECT
+	tb.Assignment,
+	tb.AssignmentEntityNumber as Job,
+	tb.LastTransferDate, tb.LastTransferNumber, tb.ItemNumber,
+	tb.Description, tb.Quantity,
+	--rsl.Description as RateSheet,
+	ccode.Description as CostCode,
+	ccent.RateSheetIdTools, rsh.Type,
+	rsh.MonthlyRate, ccent.Description,
+	CASE
+		WHEN rsh.MonthlyRate >0
+		THEN rsh.MonthlyRate *176
+	ELSE 0 END AS 'Monthly Rate'
+FROM Toolbrowser tb
+	JOIN Ratesheetlines rsh (NOLOCK) ON tb.ModelId = rsh.ModelId
+	JOIN TransferHeaders th (NOLOCK) ON th.CostCodeIDTo = rsh.CostCodeId
+	JOIN TransferLines tl (NOLOCK) ON th.TransferHeaderId = tl.TransferHeaderId
+	JOIN CostCenters ccent (NOLOCK) ON tl.ToCostCenterId=  ccent.CostCenterId
+	JOIN CostCodes ccode (NOLOCK) ON tl.ToCostCodeId = ccode.CostCodeId
+	JOIN BillingLines bl (NOLOCK) ON bl.CostCenterId = tl.ToCostCenterId
+	--JOIN RateSheetHeaders ON CostCenters.RateSheetIdTools=RateSheetHeaders.RateSheetHeaderId
+	JOIN RateSheetLines rsl (NOLOCK) ON rsh.RateSheetHeaderId = rsl.RateSheetHeaderId
+		WHERE tb.Assignment IS NOT NULL and tb.Assignment != 'Yard'
+		ORDER BY Assignment, ItemNumber
+
+/*
+	SELECT CRITERIA
+
+	tb.Assignment,
+	tb.AssignmentEntityNumber as Job,
+	tb.LastTransferDate, tb.LastTransferNumber, tb.ItemNumber,
+	tb.Description, tb.Quantity,
+	--rsl.Description as RateSheet,
+	ccode.Description as CostCode,
+	ccent.RateSheetIdTools, rsh.Type,
+	rsh.MonthlyRate, ccent.Description,
+	CASE
+		WHEN rsh.MonthlyRate >0
+		THEN rsh.MonthlyRate *176
+	ELSE 0 END AS 'Monthly Rate'
+
+*/
+
+SELECT DISTINCT
+	tb.Assignment,
+	tb.AssignmentEntityNumber as Job,
+	tb.LastTransferDate, tb.LastTransferNumber, tb.ItemNumber,
+	tb.Description, tb.Quantity,
+
+FROM ToolBrowser tb 
+	JOIN TransferLines tl (NOLOCK) ON tl.TransferLineId = tb.LastTransferLineId
+	LEFT JOIN TransferHeaders th (NOLOCK) ON th. TransferHeaderId = tl.TransferHeaderId
+	LEFT JOIN CostCenters ccentHeaderTo (NOLOCK) ON ccentHeaderTo.CostCenterId = th.CostCenterIdTo
+	LEFT JOIN CostCenters ccentLineTo (NOLOCK) ON ccentLineTo.CostCenterId = tl.ToCostCenterId
+	--LEFT JOIN CostCodes ccodeHeaderTo (NOLOCK) ON ccodeHeaderTo.CostCenterId = ccentHeaderTo.CostCenterId
+	LEFT JOIN CostCodes ccodeLineTo (NOLOCK) ON ccodeLineTo.CostCenterId = ccentLineTo.CostCenterId
+	JOIN RateSheetHeaders rsh (NOLOCK) ON rsh.RateSheetHeaderId = ccentTo.RateSheetIdTools
+	JOIN RateSheetLines rsl (NOLOCK) ON rsl.CostCodeId = ccode.CostCodeId
+
+	
+
+FROM Toolbrowser tb
+	JOIN Ratesheetlines rsh (NOLOCK) ON tb.ModelId = rsh.ModelId
+	JOIN TransferHeaders th (NOLOCK) ON th.CostCodeIDTo = rsh.CostCodeId
+	JOIN TransferLines tl (NOLOCK) ON th.TransferHeaderId = tl.TransferHeaderId
+	JOIN CostCenters ccent (NOLOCK) ON tl.ToCostCenterId=  ccent.CostCenterId
+	JOIN CostCodes ccode (NOLOCK) ON tl.ToCostCodeId = ccode.CostCodeId
+	JOIN BillingLines bl (NOLOCK) ON bl.CostCenterId = tl.ToCostCenterId
+	--JOIN RateSheetHeaders ON CostCenters.RateSheetIdTools=RateSheetHeaders.RateSheetHeaderId
+	JOIN RateSheetLines rsl (NOLOCK) ON rsh.RateSheetHeaderId = rsl.RateSheetHeaderId
+		WHERE tb.Assignment IS NOT NULL and tb.Assignment != 'Yard'
+		ORDER BY Assignment, ItemNumber
+
+select LastTransferLineId, * from ToolBrowser
 
