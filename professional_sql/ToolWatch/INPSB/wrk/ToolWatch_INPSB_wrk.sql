@@ -111,15 +111,16 @@ SELECT DISTINCT
 	tb.Assignment,
 	tb.AssignmentEntityNumber as Job,
 	tb.LastTransferDate, tb.LastTransferNumber, tb.ItemNumber,
-	tb.Description, tb.Quantity,
+	tb.Description, tb.Quantity--,
+	--rsl.Description as RateSheet,
+	--ccode.Description as CostCode
 
 FROM ToolBrowser tb 
 	JOIN TransferLines tl (NOLOCK) ON tl.TransferLineId = tb.LastTransferLineId
-	LEFT JOIN TransferHeaders th (NOLOCK) ON th. TransferHeaderId = tl.TransferHeaderId
-	LEFT JOIN CostCenters ccentHeaderTo (NOLOCK) ON ccentHeaderTo.CostCenterId = th.CostCenterIdTo
-	LEFT JOIN CostCenters ccentLineTo (NOLOCK) ON ccentLineTo.CostCenterId = tl.ToCostCenterId
+	JOIN TransferHeaders th (NOLOCK) ON th. TransferHeaderId = tl.TransferHeaderId
+	JOIN CostCenters ccent (NOLOCK) ON ccent.CostCenterId = tl.ToCostCenterId
 	--LEFT JOIN CostCodes ccodeHeaderTo (NOLOCK) ON ccodeHeaderTo.CostCenterId = ccentHeaderTo.CostCenterId
-	LEFT JOIN CostCodes ccodeLineTo (NOLOCK) ON ccodeLineTo.CostCenterId = ccentLineTo.CostCenterId
+	JOIN CostCodes ccode (NOLOCK) ON ccode.CostCodeId = tl.ToCostCodeId
 	JOIN RateSheetHeaders rsh (NOLOCK) ON rsh.RateSheetHeaderId = ccentTo.RateSheetIdTools
 	JOIN RateSheetLines rsl (NOLOCK) ON rsl.CostCodeId = ccode.CostCodeId
 
