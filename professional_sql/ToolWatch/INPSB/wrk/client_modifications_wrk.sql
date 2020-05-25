@@ -8,26 +8,9 @@
 	1218. - 34 vs. 32
 */
 
-/*
-	MISSING ITEMNUMBERS 
-	1186.	
-		9942-03 - no LastTransferLineId - no RateSheetId...
-		460
-		394
-		34796
-	1202.
-		9942-03 - no LastTransferLineId
-		9932-01 - no LastTransferLineId
-		9917-01 
-		9902-96
-		4-1458 - no LastTransferLineId
-	1216. - 9 vs. 7
-		9942-04 - no LastTransferLineId
-		4-424 - no LastTransferLineId
-*/
 
 SELECT  itemnumber, itemid, * FROM ToolBrowser tb
-	WHERE AssignmentEntityNumber = '1186.' 
+	WHERE AssignmentEntityNumber = '1202.' 
 	ORDER BY tb.ItemNumber desc
 
 select th.transferheaderid, tb.AssignmentEntityNumber, tb.ItemNumber,
@@ -40,30 +23,6 @@ from ToolBrowser tb
 	FULL JOIN TransferHeaders th (NOLOCK) ON th.TransferHeaderId = tl.TransferHeaderId
 	where AssignmentEntityNumber = '1186.' and Assignment <> 'Yard'
 	ORDER BY tb.ItemNumber desc, tb.AssignmentEntityNumber DESC, th.CreatedOn DESC
-
-
-/*
-SELECT DISTINCT
-	tb.Assignment,
-	tb.AssignmentEntityNumber as Job,
-	tb.LastTransferDate, tb.LastTransferNumber, tb.ItemNumber,
-	tb.Description, tb.Quantity,
-	RateSheetHeaders.Description as RateSheet,
-	-- CD: begin
-	CASE
-		WHEN th.CostCodeIDTo = codeHead.CostCodeId 
-		THEN codeHead.Description 
-		ELSE codeLine.Description
-	END as CostCode,
-	-- CD: end
-	cent.RateSheetIdTools, cent.RateSheetIdMaterials, cent.RateSheetIdLabor, rsl.Type,
-	rsl.MonthlyRate, cent.Description,
-	CASE
-		WHEN rsl.MonthlyRate > 0
-		THEN rsl.MonthlyRate * 176
-	ELSE 0
-	END as MonthlyRate */
-
 
 /*
 	MISSING ITEMNUMBERS 
@@ -115,8 +74,6 @@ FROM Toolbrowser tb
 		WHERE Assignment IS NOT NULL and Assignment <> 'Yard' 
 			and rsl.Type <> 'Job Costing' and tb.AssignmentEntityNumber = '1186.' 
 		ORDER BY tb.ItemNumber desc, tb.Assignment desc
-
-
 		
 
 
