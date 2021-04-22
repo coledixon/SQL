@@ -18,8 +18,8 @@ FROM TransferHeaders toh
 	JOIN Models m (NOLOCK) ON i.ModelId = m.ModelId
 	JOIN Categories c (NOLOCK) ON m.CategoryId = c.CategoryId
 	LEFT JOIN ToolBrowser tool (NOLOCK) ON tool.ItemId = tol.ItemId
-		WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
-			UNION
+WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
+	UNION
 SELECT  toh.TransferHeaderId, YEAR(toh.CreatedOn) as Year, CAST(toh.CreatedOn as DATE) as TOLineDate, -- TO header info
 	fromLoc.description as FromLocation, COALESCE(fromLoc.City,'') as City, COALESCE(fromLoc.Country,'') as County, toh.TransferredFromEntityId,-- from location
 	toLoc.Description as ToLocation, COALESCE(toLoc.City,'') as City, COALESCE(toLoc.Country,'') as County, toh.TransferredToEntityId, -- to location
@@ -33,6 +33,6 @@ FROM TransferHeaders toh
 	JOIN Models m (NOLOCK) ON i.ModelId = m.ModelId
 	JOIN Categories c (NOLOCK) ON m.CategoryId = c.CategoryId
 	LEFT JOIN ToolBrowser tool (NOLOCK) ON tool.ItemId = tol.ItemId
-		WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
-		ORDER BY toh.CreatedOn DESC
+WHERE YEAR(toh.CreatedOn) IN('2019','2020') -- tax range
+ORDER BY toh.CreatedOn DESC
 
