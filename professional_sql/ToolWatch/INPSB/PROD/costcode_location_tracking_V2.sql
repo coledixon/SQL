@@ -43,6 +43,6 @@ FROM Toolbrowser tb
 	FULL JOIN RateSheetLines rsl (NOLOCK) ON rsh.RateSheetHeaderId = rsl.RateSheetHeaderId and tb.ModelId = rsl.ModelId
 	LEFT JOIN CostCodes codeHead (NOLOCK) ON th.CostCodeIDTo = codeHead.CostCodeId -- CD 05/2020
 	LEFT JOIN CostCodes codeLine (NOLOCK) ON tl.ToCostCodeId = codeLine.CostCodeId -- CD 05/2020
-		WHERE tb.Assignment IS NOT NULL and tb.Assignment <> 'Yard'
-			and (rsl.Type <> 'Job Costing' OR rsl.type IS NULL) -- CD 05/20202
-		ORDER BY tb.Assignment desc, tb.ItemNumber desc
+WHERE tb.Assignment IS NOT NULL and tb.Assignment <> 'Yard'
+	and (rsl.Type <> 'Job Costing' OR rsl.type IS NULL) -- CD 05/20202
+ORDER BY tb.Assignment desc, tb.ItemNumber desc
