@@ -1,3 +1,4 @@
+
 /*
 	PINKARD TOOL REPORTING (V3)
 		Cole Dixon :: Copyright 2021
@@ -69,7 +70,7 @@ WITH tools_equipment AS
 SELECT DISTINCT
 	tb.Assignment,
 	tb.AssignmentEntityNumber AS Job,
-	FORMAT(t.total_posted, '###,##0.##') as TotalPostedToDate, -- CD 05/17/2021: FORMAT() for presentation purposes
+	FORMAT(t.total_posted, '##,###,##0.##') as TotalPostedToDate, -- CD 05/17/2021: FORMAT() for presentation purposes
 	COALESCE(tb.LastTransferDate,'') AS LastTransferData, COALESCE(tb.LastTransferNumber, '') AS LastTransferNumber, tb.ItemNumber, -- CD 05/26/2020
 	tb.Description, tb.Quantity,
 	COALESCE(rsh.Description,'') AS RateSheet, -- CD 05/26/2020
