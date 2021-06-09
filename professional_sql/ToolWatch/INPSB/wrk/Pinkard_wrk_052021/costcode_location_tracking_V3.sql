@@ -18,11 +18,13 @@
 		-- calc final total based on total per item type
 		-- JOIN final_total to original project query
 		-- FORMAT() final_total output for presentation purposes
+		/* ----- 06/09/2021 ----- */
+		-- per CTE guidelines, changed first CTE to ;WITH (this should prevent any batching syntax errors)
 */
 -- PURPOSE: tracking tool costing by location
 
 -- BEGIN - CD 05/17/2021 
-WITH tools_equipment AS
+;WITH tools_equipment AS -- CD 06/09/2021
 (
 	-- totals of all Tools & Equipment on a posted billing header and not 'pending' on the billing line by cost center
 	SELECT DISTINCT SUM(bl.Quantity * bl.ChargeEach) AS ToolsEquipmentTotal, bl.CostCenterId 
