@@ -1,0 +1,24 @@
+
+FROM WILLIAM
+
+So the reporting cloud access information is as follows,
+url: reportingcloud.east.toolwatch.net
+Login : INPN2
+Password : 65o9COKFPbC38CF7
+
+Cost Center to use is #1223.  - Kavod Senior Life
+
+To date postings amount to: $107,801.96
+the postings consist of tools & equipment, materials & consumables, and misc charges (misc charges I believe are in their own view).
+They will want to reference the billing side of the rate sheets.
+
+Also I have attached a printout of the to date postings for the cost center.
+Let me know if you have any questions.
+
+
+CUSTOM NOTES
+
+- add posted per cost center to view
+- total billed (posted) for life of cost center
+- new col: TotalPostToDate
+- Pinkard uses jobCost + Billing = RateSheet
